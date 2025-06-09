@@ -1,5 +1,7 @@
 const bcrypt = require("bcrypt");
 const User = require("../models/User"); 
+
+
 const registerUser = async ({ email, username, password }) => {
   if (!email || !username || !password) {
     throw { status: 400, message: "All fields are required" };
