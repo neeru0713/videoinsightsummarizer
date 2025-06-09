@@ -33,8 +33,9 @@ const SignUp = () => {
   };
 
   return (
-    
-      <div className="flex flex-col w-[20%] relative gap-6 border rounded-xl border-gray-200 m-auto shadow shadow-lg mt-[5%] p-6">
+    <div className="flex flex-col gap-2">
+      <h1 className="m-auto p-4 text-2xl font-bold text-blue-700">SignUp</h1>
+      <div className="flex flex-col w-[20%] relative gap-6 border rounded-xl border-gray-200 m-auto shadow shadow-lg p-6">
         <input
           type="email"
           name="email"
@@ -54,12 +55,12 @@ const SignUp = () => {
         <button
           onClick={handleSubmit}
           type="submit"
-          className="bg-blue-500 text-white p-2 rounded-md cursor-pointer"
+          className="bg-blue-700 text-white p-2 rounded-md cursor-pointer"
         >
           Submit
         </button>
       </div>
-   
+    </div>
   );
 };
 
