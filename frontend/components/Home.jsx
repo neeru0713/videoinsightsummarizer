@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import {Link} from "react-router-dom";
 
 const extractVideoId = (url) => {
   const match = url.match(/(?:v=|\/)([0-9A-Za-z_-]{11})/);
@@ -60,13 +61,18 @@ const Home = () => {
   return (
     <div className="flex flex-col">
       <div className="bg-[#a61f22] p-6">
-        <div className="flex justify-between mx-[10%]">
+        <div className="flex justify-between mx-[10%] cursor-pointer">
           <h1 className="text-white font-semibold text-lg">VideoInsight</h1>
+
+          <Link to="/admin" className="text-lg text-white font-semibold">
+            Admin
+          </Link>
         </div>
         <div className="flex flex-col text-center p-[6%] gap-8">
           <p className="text-4xl text-white font-semibold">
             VideoInsight Summarizer
           </p>
+
           <div className="flex w-[30%] m-auto gap-2">
             <input
               type="searchTerm"
