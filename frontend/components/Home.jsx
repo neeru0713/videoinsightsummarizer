@@ -1,34 +1,39 @@
 import React, { useState } from "react";
 
 const Home = () => {
-  const [serachTerm, setSerachTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [videoData, setVideoData] = useState(null);
 
-  const inputChangeHandler = (e) => {
+
+  const inputChangeHandler = async (e) => {
     const { name, value } = e.target;
-    if (name === "serachTerm") {
-      setSerachTerm(value);
-    }
-  };
 
-  const handleSummarise = async (e) => {
-    e.preventDefault();
+    if (name === "searchTerm") {
+      setSearchTerm(value);
+    }
 
     try {
-      const response = await fetch("http://localhost:3000/api/", {
+      const response = await fetch("http://localhost:3000/api/videoDetails", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({serachTerm}),
+        body: JSON.stringify({ searchTerm: value }),
       });
 
       const res = await response.json();
       console.log("......res", res);
-
-    
+      setVideoData(res);
     } catch (error) {
       console.error("Sign In Error", error.message);
     }
+  };
+  
+
+  const handleSummarise = async (e) => {
+    e.preventDefault();
+
+   
   };
 
   return (
@@ -43,10 +48,10 @@ const Home = () => {
           </p>
           <div className="flex w-[30%] m-auto gap-2">
             <input
-              type="serachTerm"
-              name="serachTerm"
+              type="searchTerm"
+              name="searchTerm"
               placeholder="Paste your video link here"
-              value={serachTerm}
+              value={searchTerm}
               onChange={inputChangeHandler}
               className="border rounded-sm border-gray-300 p-4 text-xs bg-white m-auto w-[70%]"
             />
@@ -59,6 +64,20 @@ const Home = () => {
           </div>
         </div>
       </div>
+
+      {videoData && (
+        <div className="flex flex-col items-center mt-8 gap-2">
+          <img
+            src={videoData.thumbnail}
+            alt="Video Thumbnail"
+            className="w-[15%] rounded-lg "
+          />
+          <p className="text-md font-semibold mt-2">{videoData.title}</p>
+          <p className="text-md text-gray-500">
+            ⏱ Duration: {videoData.duration}
+          </p>
+        </div>
+      )}
 
       <div class="intro text-lg max-w-xl mx-auto p-4 my-6">
         <p class="mt-4 font-semibold">
