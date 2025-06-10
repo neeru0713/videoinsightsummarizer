@@ -6,7 +6,7 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 const authRoutes = require("./routes/authRoutes");
-// const authSummarise = require("./routes/authSummarise");
+const authSummarise = require("./routes/authSummarise");
 const authVideoDetails = require("./routes/authVideoDetails");
 
 const app = express();
@@ -16,7 +16,7 @@ app.use(express.json());
 
 app.use("/api/auth", authRoutes);
 app.use("/api/videoDetails", authVideoDetails);
-// app.use("/api/summarise", authSummarise);
+app.use("/api/summarise", authSummarise);
 
 mongoose
   .connect(process.env.MONGO_URI, {
