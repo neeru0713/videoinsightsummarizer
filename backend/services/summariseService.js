@@ -1,12 +1,12 @@
 
 // Corrected import: Destructure fetchTranscript
-const { fetchTranscript } = require("youtube-transcript");
+const { YoutubeTranscript } = require("youtube-transcript");
 const { OpenAI } = require("openai");
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 const getTranscript = async (videoId) => {
   // Ensure videoId is passed correctly
-  const transcript = await fetchTranscript(videoId);
+  const transcript = await YoutubeTranscript.fetchTranscript(videoId);
   return transcript.map((t) => t.text).join(" ");
 };
 
@@ -16,7 +16,7 @@ const createSummary = async (transcript) => {
     transcript.length > 10000 ? transcript.slice(0, 10000) : transcript;
 
   const response = await openai.chat.completions.create({
-    model: "gpt-4", // Consider 'gpt-3.5-turbo' for faster and cheaper summaries if GPT-4 isn't strictly necessary.
+    model: "gpt-4.1", // Consider 'gpt-3.5-turbo' for faster and cheaper summaries if GPT-4 isn't strictly necessary.
     messages: [
       {
         role: "system",

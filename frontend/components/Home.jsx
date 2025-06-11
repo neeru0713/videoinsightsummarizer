@@ -23,11 +23,14 @@ const Home = () => {
     if (!videoId) return;
 
     try {
-      const response = await fetch("http://localhost:3000/api/videoDetails", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ searchTerm: value }),
-      });
+      const response = await fetch(
+        "https://videoinsightsummarizer.onrender.com/api/videoDetails",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ searchTerm: value }),
+        }
+      );
 
       const res = await response.json();
       setVideoData(res);
@@ -43,11 +46,14 @@ const Home = () => {
 
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:3000/api/summarise/summary", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ videoId }),
-      });
+      const res = await fetch(
+        "https://videoinsightsummarizer.onrender.com/api/summarise/summary",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ videoId }),
+        }
+      );
 
       const data = await res.json();
       setSummary(data.summary);

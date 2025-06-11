@@ -20,13 +20,16 @@ const SignUp = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch("http://localhost:3000/api/auth/signup", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, username, password }),
-      });
+      const response = await fetch(
+        "https://videoinsightsummarizer.onrender.com/api/auth/signup",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email, username, password }),
+        }
+      );
 
       const res = await response.json();
       console.log("......res", res);
