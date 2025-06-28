@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import {Link} from "react-router-dom";
+import { PuffLoader } from "react-spinners";
+
 
 const extractVideoId = (url) => {
   const match = url.match(/(?:v=|\/)([0-9A-Za-z_-]{11})/);
@@ -11,6 +13,13 @@ const Home = () => {
   const [videoData, setVideoData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [summary, setSummary] = useState("");
+
+  const formatDuration = (seconds) => {
+  const mins = Math.floor(seconds / 60);
+  const secs = seconds % 60;
+  return `${mins} min ${secs} sec`;
+};
+
 
   const inputChangeHandler = async (e) => {
     const { name, value } = e.target;
@@ -24,7 +33,7 @@ const Home = () => {
 
     try {
       const response = await fetch(
-        "https://videoinsightsummarizer.onrender.com/api/videoDetails",
+        "http://localhost:3000/api/videoDetails",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -47,7 +56,7 @@ const Home = () => {
     setLoading(true);
     try {
       const res = await fetch(
-        "https://videoinsightsummarizer.onrender.com/api/summarise/summary",
+        "http://localhost:3000/api/summarise",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -88,12 +97,20 @@ const Home = () => {
               onChange={inputChangeHandler}
               className="border rounded-sm border-gray-300 p-4 text-xs bg-white m-auto w-[70%]"
             />
-            <button
-              onClick={handleSummarise}
-              className="bg-black text-white font-bold p-2 rounded-md cursor-pointer text-sm"
-            >
-              {loading ? "Summarizing..." : "Summarise"}
-            </button>
+              <button
+                onClick={handleSummarise}
+                className="bg-black text-white font-bold p-2 rounded-md cursor-pointer text-sm flex items-center justify-center min-w-[130px]"
+              >
+                {loading ? (
+                  <>
+                    <PuffLoader size={18} color="#ffffff" loading={true} className="mr-2" />
+                    Summarizing...
+                  </>
+                ) : (
+                  "Summarise"
+                )}
+              </button>
+
           </div>
         </div>
       </div>
@@ -107,7 +124,7 @@ const Home = () => {
           />
           <p className="text-md font-semibold mt-2">{videoData.title}</p>
           <p className="text-md text-gray-500">
-            ⏱ Duration: {videoData.duration}
+            ⏱ Duration: {formatDuration(videoData.duration)}
           </p>
         </div>
       )}
@@ -115,9 +132,18 @@ const Home = () => {
       {summary && (
         <div className="max-w-xl mx-auto mt-8 p-4 border rounded bg-gray-100">
           <h2 className="font-semibold mb-2">📄 Summary:</h2>
-          {/* Changed max-h-full to a fixed max-height (e.g., max-h-96 for 24rem) */}
           <div className="max-h-96 overflow-y-scroll pr-2">
-            <p>{summary}</p>
+            {summary.split('\n').map((line, idx) => {
+              // Replace **text** with <strong>text</strong>
+              const formatted = line.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
+              return (
+                <p
+                  key={idx}
+                  className="mb-2 whitespace-pre-wrap font-light"
+                  dangerouslySetInnerHTML={{ __html: formatted }}
+                />
+              );
+            })}
           </div>
         </div>
       )}

@@ -1,25 +1,18 @@
-const {
-  getTranscript,
-  createSummary,
-} = require("../services/summariseService");
+const { summarizeTranscript } = require("../services/summariseService");
 
-const Summary = require("../models/Summary");
+const getSummary = async (req, res) => {
+  const { videoId } = req.body;
 
-const summariseWithAI = async (req, res) => {
+  if (!videoId) {
+    return res.status(400).json({ error: "videoId are required" });
+  }
+
   try {
-    console.log(".....req.body",req.body)
-    const { videoId } = req.body;
-
-    const transcript = await getTranscript(videoId);
-    const summary = await createSummary(transcript);
-
-    const saved = await Summary.create({ videoId, summary });
-
-    res.json({ summary: saved.summary });
+    const summary = await summarizeTranscript(videoId);
+    res.json({ summary });
   } catch (err) {
-    console.error("Summarize error:", err);
-    res.status(500).json({ message: "Failed to summarize video" });
+    res.status(500).json({ error: "Failed to summarize", details: err.message });
   }
 };
 
-module.exports = { summariseWithAI };
+module.exports = { getSummary };
